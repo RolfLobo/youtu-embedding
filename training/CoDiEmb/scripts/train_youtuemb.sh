@@ -1,14 +1,14 @@
 #!/bin/bash
 set -ex
 
-BASE_DIR=$BASE_DIR  # workspace 路径，需要根据实际情况修改
+BASE_DIR=$BASE_DIR  # needs to be modified according to the actual situation
 IR_DATA_PATH=$BASE_DIR/CoDiEmb/data/ir_example_data
 STS_DATA_PATH=$BASE_DIR/CoDiEmb/data/sts_example_data
 export HF_DATASETS_CACHE=$IR_DATA_PATH/cache
 export WANDB_DISABLED=true
 
 model_name_or_path=$BASE_DIR/model/youtu_supervised_cmteb_and_business_stage2
-OUTPUT_PATH=$BASE_DIR/output/youtu_embedding_model_p2n4-5epoch-lr5e-5
+OUTPUT_PATH=$BASE_DIR/output/youtu_embedding_model
 
 mkdir -p $OUTPUT_PATH
 LOG_PATH=$OUTPUT_PATH

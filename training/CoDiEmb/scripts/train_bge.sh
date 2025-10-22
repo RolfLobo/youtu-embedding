@@ -1,14 +1,14 @@
 #!/bin/bash
 set -ex
 
-BASE_DIR=$BASE_DIR  # workspace 路径，需要根据实际情况修改
+BASE_DIR=$BASE_DIR  # needs to be modified according to the actual situation
 IR_DATA_PATH=$BASE_DIR/CoDiEmb/data/ir_example_data
 STS_DATA_PATH=$BASE_DIR/CoDiEmb/data/sts_example_data
 export HF_DATASETS_CACHE=$IR_DATA_PATH/cache
 export WANDB_DISABLED=true
 
 model_name_or_path=$BASE_DIR/model/bge-large-zh-v1.5
-OUTPUT_PATH=$BASE_DIR/output/0804-bge-ir64-sts32-p2n4-5epoch-lr5e-5
+OUTPUT_PATH=$BASE_DIR/output/bge_model
 
 mkdir -p $OUTPUT_PATH
 LOG_PATH=$OUTPUT_PATH
@@ -18,7 +18,6 @@ PROJECT_PATH=$BASE_DIR/CoDiEmb
 DS_PATH=$PROJECT_PATH/scripts/deepspeed_config_fp32_zero1.json
 cd $PROJECT_PATH
 
-# 去除 deepspeed 并不会产生太多显存消耗
 LAUNCHER="python3 -m torch.distributed.run \
     --nnodes $HOST_NUM \
     --node_rank $INDEX \
@@ -28,8 +27,6 @@ LAUNCHER="python3 -m torch.distributed.run \
     train/run.py \
     --deepspeed ${DS_PATH}"
 
-# e5, bge 模型的 max_position_embeddings 为 512
-# 在不开启 gradient_checkpointing 的情况下，bs 需要降到 16，且必须开启 bf16
 export CMD=" \
     --output_dir ${OUTPUT_PATH} \
     --model_name_or_path ${model_name_or_path} \

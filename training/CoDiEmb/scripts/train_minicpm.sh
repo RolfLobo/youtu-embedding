@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-BASE_DIR=$BASE_DIR  # workspace 路径，需要根据实际情况修改
+BASE_DIR=$BASE_DIR  # needs to be modified according to the actual situation
 IR_DATA_PATH=$BASE_DIR/CoDiEmb/data/ir_example_data
 STS_DATA_PATH=$BASE_DIR/CoDiEmb/data/sts_example_data
 export HF_DATASETS_CACHE=$IR_DATA_PATH/cache
