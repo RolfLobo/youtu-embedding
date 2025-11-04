@@ -482,7 +482,7 @@ def main():
         trainer.get_train_dataloader = sampler_dict[data_args.data_sampler]
 
     global_step = 0
-    def training_step(self, model, inputs) -> torch.Tensor:
+    def training_step(self, model, inputs, num_items_in_batch=None) -> torch.Tensor:
         """
         Perform a training step on a batch of inputs.
 
