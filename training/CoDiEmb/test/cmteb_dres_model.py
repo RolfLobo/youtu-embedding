@@ -110,22 +110,22 @@ class CmtebDRESModel(DRESModel):
                 if self.pooling_method == 'mean':
                     instruction_char_lens = [len(instruction)] * len(batch)
                     
-                    # 将指令长度列表转为 Tensor，并增加一个维度用于广播，shape: (batch_size, 1)
+                    # Convert instruction length list to tensor and add dimension for broadcasting, shape: (batch_size, 1)
                     instruction_lens_tensor = torch.tensor(
                         instruction_char_lens, 
                         device=offsets.device
                     ).unsqueeze(1)
 
-                    # 获取所有 token 的结束偏移量
+                    # Get the ending offsets of all tokens
                     #    offsets shape: (batch_size, seq_len, 2)
                     #    end_offsets shape: (batch_size, seq_len)
                     end_offsets = offsets[:, :, 1]
 
-                    # 通过广播进行一次性向量化比较
+                    # Vectorized comparison through broadcasting
                     #    (batch_size, seq_len) > (batch_size, 1) -> (batch_size, seq_len)
                     pooling_mask = (end_offsets > instruction_lens_tensor).to(inputs["attention_mask"].dtype)
                     
-                    # 与原始 attention_mask 相乘，屏蔽 padding
+                    # Multiply with original attention_mask to mask out padding tokens
                     pooling_mask = pooling_mask * inputs["attention_mask"]
                     embeddings = self.mean_pooling(last_hidden_state, pooling_mask)
                 elif self.pooling_method == 'cls':
