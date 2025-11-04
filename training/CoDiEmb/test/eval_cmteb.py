@@ -60,23 +60,14 @@ task2eninstruction = {
 }
 
 def build_instruction_prefix(model_name: str, instruction: str = "") -> str:
-    """
-    根据模型名称、任务指令和文本类型，生成与训练时一致的指令前缀。
-
-    :param model_name: 模型名称或路径，用于判断模型类型。
-    :param instruction: 具体的任务指令文本，例如 "为这个句子生成表示以用于检索"。
-    :return: 构建好的指令前缀字符串。
-    """
     model_name_lower = model_name.lower()
     is_minicpm_or_e5 = "minicpm" in model_name_lower or "e5" in model_name_lower
     is_bge = "bge" in model_name_lower
 
     prefix = ""
-    # IR 任务的 Query 部分 或 STS 任务
     if instruction:
         prefix = f"Instruction: {instruction} Query: "
 
-    # 根据模型类型添加起始 Token
     if is_minicpm_or_e5:
         prefix = f"<s>{prefix}"
     elif is_bge:
@@ -86,19 +77,11 @@ def build_instruction_prefix(model_name: str, instruction: str = "") -> str:
 
 
 def build_passage_instruction_prefix(model_name: str, instruction: str = "") -> str:
-    """
-    根据模型名称、任务指令和文本类型，生成与训练时一致的指令前缀。
-
-    :param model_name: 模型名称或路径，用于判断模型类型。
-    :param instruction: 具体的任务指令文本，例如 "为这个句子生成表示以用于检索"。
-    :return: 构建好的指令前缀字符串。
-    """
     model_name_lower = model_name.lower()
     is_minicpm_or_e5 = "minicpm" in model_name_lower or "e5" in model_name_lower
     is_bge = "bge" in model_name_lower
 
     prefix = ""
-    # IR 任务的 Passage 部分
     if is_minicpm_or_e5:
         prefix = "<s>"
     elif is_bge:
@@ -157,8 +140,6 @@ def load_model(args):
         print(f"Loading raw model directly from: {base_model_path}")
         print("=" * 60)
 
-        # 直接使用最简单的方式初始化评测模型，让 CmtebDRESModel 内部处理加载
-        # 此时不传递 model_object，触发其内部的 from_pretrained 逻辑
         model = CmtebDRESModel(
             model_name_or_path=base_model_path,
             pooling_method=args.pooling_method,
