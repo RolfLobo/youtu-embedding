@@ -315,6 +315,7 @@ def main():
 
     if len(ds_embedding_lens) > 1:
         assert training_args.dataloader_drop_last, "Multiple datasets are only supported with dropping the last incomplete batch, set `--dataloader_drop_last`"
+        
         logger.info("Embedding dataset lengths: %s", ds_embedding_lens)
         global_batch_size_for_chunking = training_args.per_device_train_batch_size * training_args.gradient_accumulation_steps
 

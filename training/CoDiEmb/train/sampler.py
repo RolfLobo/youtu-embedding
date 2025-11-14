@@ -14,7 +14,6 @@ class MixedDatasetSampler(torch.utils.data.Sampler[int]):
     Core concept:
     - Within each GPU: samples in one batch must come from the same dataset
     - Across different GPUs: can simultaneously process different datasets
-    - Key fix: ensure all GPUs have exactly the same number of training steps
 
     Implementation logic:
     1. Calculate the total number of complete batches available globally

@@ -96,14 +96,6 @@ class CustomDataset(torch.utils.data.Dataset):
         return negs, scores
 
     def __getitem__(self, item: int):
-        """
-        Problems:
-        If training for >1 epoch in unified mode, the same generative & embedding samples will
-        always be in the same batch as the same index is used for both datasets.
-        Solution:
-        Don't train for >1 epoch by duplicating the dataset you want to repeat in the folder.
-        Upon loading, each dataset is shuffled so indices will be different.
-        """
         query, passages = None, None
 
         if item < self.len_ir:
